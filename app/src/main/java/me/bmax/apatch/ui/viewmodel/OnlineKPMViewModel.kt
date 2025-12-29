@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.bmax.apatch.apApp
 import org.json.JSONArray
+import java.util.Locale
 
 class OnlineKPMViewModel : ViewModel() {
     companion object {
@@ -52,8 +53,13 @@ class OnlineKPMViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             isRefreshing = true
             try {
+                val locale = Locale.getDefault()
+                val language = locale.language
+                val lang = if (language == "zh" || language == "mgl") "zh" else "en"
+                val url = "$MODULES_URL&lang=$lang"
+
                 val response = apApp.okhttpClient.newCall(
-                    okhttp3.Request.Builder().url(MODULES_URL).build()
+                    okhttp3.Request.Builder().url(url).build()
                 ).execute()
                 
                 if (response.isSuccessful) {
@@ -62,12 +68,20 @@ class OnlineKPMViewModel : ViewModel() {
                     val list = ArrayList<OnlineKPM>()
                     for (i in 0 until jsonArray.length()) {
                         val obj = jsonArray.getJSONObject(i)
+                        val descZh = obj.optString("description")
+                        val descEn = obj.optString("description_en")
+                        val finalDesc = if (lang == "zh") {
+                            descZh
+                        } else {
+                            if (descEn.isNotEmpty()) descEn else descZh
+                        }
+                        
                         list.add(
                             OnlineKPM(
                                 name = obj.optString("name"),
                                 version = obj.optString("version"),
                                 url = obj.optString("url"),
-                                description = obj.optString("description")
+                                description = finalDesc
                             )
                         )
                     }

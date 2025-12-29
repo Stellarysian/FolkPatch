@@ -10,6 +10,11 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -152,11 +157,14 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
     var dontShowAgain by remember { mutableStateOf(false) }
 
     var showMoreModuleInfo by remember { mutableStateOf(prefs.getBoolean("show_more_module_info", true)) }
-    
+    var foldSystemModule by remember { mutableStateOf(prefs.getBoolean("fold_system_module", false)) }
+
     DisposableEffect(Unit) {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
             if (key == "show_more_module_info") {
                 showMoreModuleInfo = sharedPrefs.getBoolean("show_more_module_info", true)
+            } else if (key == "fold_system_module") {
+                foldSystemModule = sharedPrefs.getBoolean("fold_system_module", false)
             }
         }
         prefs.registerOnSharedPreferenceChangeListener(listener)
@@ -310,6 +318,7 @@ fun APModuleScreen(navigator: DestinationsNavigator) {
                     viewModel = viewModel,
                     modules = filteredModuleList,
                     showMoreModuleInfo = showMoreModuleInfo,
+                    foldSystemModule = foldSystemModule,
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
@@ -412,6 +421,7 @@ private fun ModuleList(
     viewModel: APModuleViewModel,
     modules: List<APModuleViewModel.ModuleInfo>,
     showMoreModuleInfo: Boolean,
+    foldSystemModule: Boolean,
     modifier: Modifier = Modifier,
     state: LazyListState,
     onInstallModule: (Uri) -> Unit,
@@ -419,6 +429,7 @@ private fun ModuleList(
     snackBarHost: SnackbarHostState,
     context: Context
 ) {
+    var expandedModuleId by rememberSaveable { mutableStateOf<String?>(null) }
     val failedEnable = stringResource(R.string.apm_failed_to_enable)
     val failedDisable = stringResource(R.string.apm_failed_to_disable)
     val failedUninstall = stringResource(R.string.apm_uninstall_failed)
@@ -578,6 +589,11 @@ private fun ModuleList(
                             isChecked,
                             updatedModule.first,
                             showMoreModuleInfo = showMoreModuleInfo,
+                            foldSystemModule = foldSystemModule,
+                            expanded = expandedModuleId == module.id,
+                            onExpandToggle = {
+                                expandedModuleId = if (expandedModuleId == module.id) null else module.id
+                            },
                             onUninstall = {
                                 scope.launch { onModuleUninstall(module) }
                             },
@@ -780,6 +796,9 @@ private fun ModuleItem(
     isChecked: Boolean,
     updateUrl: String,
     showMoreModuleInfo: Boolean,
+    foldSystemModule: Boolean,
+    expanded: Boolean,
+    onExpandToggle: () -> Unit,
     onUninstall: (APModuleViewModel.ModuleInfo) -> Unit,
     onCheckChanged: (Boolean) -> Unit,
     onUpdate: (APModuleViewModel.ModuleInfo) -> Unit,
@@ -830,7 +849,13 @@ private fun ModuleItem(
     }
 
     Surface(
-        onClick = { onClick(module) },
+        onClick = {
+            if (foldSystemModule) {
+                onExpandToggle()
+            } else {
+                onClick(module)
+            }
+        },
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         color = cardColor,
@@ -968,92 +993,98 @@ private fun ModuleItem(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                AnimatedVisibility(
+                    visible = !foldSystemModule || expanded,
+                    enter = fadeIn() + expandVertically(),
+                    exit = shrinkVertically() + fadeOut()
                 ) {
-                    if (module.hasWebUi && module.enabled && !module.remove) {
-                        FilledTonalButton(
-                            onClick = { onClick(module) },
-                            contentPadding = ButtonDefaults.TextButtonContentPadding,
-                            modifier = Modifier.height(36.dp),
-                            colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = (opacity + 0.3f).coerceAtMost(1f))
-                            )
-                        ) {
-                             Icon(
-                                imageVector = Icons.AutoMirrored.Outlined.Wysiwyg,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(stringResource(R.string.apm_webui_open))
-                        }
-                    }
-
-                    if (module.hasActionScript && module.enabled && !module.remove) {
-                        FilledTonalButton(
-                            onClick = { 
-                                navigator.navigate(ExecuteAPMActionScreenDestination(module.id))
-                                viewModel.markNeedRefresh()
-                            },
-                            contentPadding = ButtonDefaults.TextButtonContentPadding,
-                            modifier = Modifier.height(36.dp),
-                            colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = (opacity + 0.3f).coerceAtMost(1f))
-                            )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Terminal,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(stringResource(R.string.apm_action))
-                        }
-                    }
-
-                     if (updateUrl.isNotEmpty() && !module.remove && !module.update) {
-                        FilledTonalButton(
-                            onClick = { onUpdate(module) },
-                            contentPadding = ButtonDefaults.TextButtonContentPadding,
-                            modifier = Modifier.height(36.dp),
-                            colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = (opacity + 0.3f).coerceAtMost(1f))
-                            )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Download,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(stringResource(R.string.apm_update))
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    FilledTonalButton(
-                        onClick = { onUninstall(module) },
-                        enabled = !module.remove,
-                        contentPadding = ButtonDefaults.TextButtonContentPadding,
-                        modifier = Modifier.height(36.dp),
-                        colors = ButtonDefaults.filledTonalButtonColors(
-                            containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = (opacity + 0.3f).coerceAtMost(1f)),
-                            contentColor = MaterialTheme.colorScheme.onErrorContainer
-                        )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Delete,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.apm_remove))
+                        if (module.hasWebUi && module.enabled && !module.remove) {
+                            FilledTonalButton(
+                                onClick = { onClick(module) },
+                                contentPadding = ButtonDefaults.TextButtonContentPadding,
+                                modifier = Modifier.height(36.dp),
+                                colors = ButtonDefaults.filledTonalButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = (opacity + 0.3f).coerceAtMost(1f))
+                                )
+                            ) {
+                                 Icon(
+                                    imageVector = Icons.AutoMirrored.Outlined.Wysiwyg,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text(stringResource(R.string.apm_webui_open))
+                            }
+                        }
+
+                        if (module.hasActionScript && module.enabled && !module.remove) {
+                            FilledTonalButton(
+                                onClick = {
+                                    navigator.navigate(ExecuteAPMActionScreenDestination(module.id))
+                                    viewModel.markNeedRefresh()
+                                },
+                                contentPadding = ButtonDefaults.TextButtonContentPadding,
+                                modifier = Modifier.height(36.dp),
+                                colors = ButtonDefaults.filledTonalButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = (opacity + 0.3f).coerceAtMost(1f))
+                                )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Terminal,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text(stringResource(R.string.apm_action))
+                            }
+                        }
+
+                         if (updateUrl.isNotEmpty() && !module.remove && !module.update) {
+                            FilledTonalButton(
+                                onClick = { onUpdate(module) },
+                                contentPadding = ButtonDefaults.TextButtonContentPadding,
+                                modifier = Modifier.height(36.dp),
+                                colors = ButtonDefaults.filledTonalButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = (opacity + 0.3f).coerceAtMost(1f))
+                                )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Download,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                Text(stringResource(R.string.apm_update))
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        FilledTonalButton(
+                            onClick = { onUninstall(module) },
+                            enabled = !module.remove,
+                            contentPadding = ButtonDefaults.TextButtonContentPadding,
+                            modifier = Modifier.height(36.dp),
+                            colors = ButtonDefaults.filledTonalButtonColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = (opacity + 0.3f).coerceAtMost(1f)),
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(stringResource(R.string.apm_remove))
+                        }
                     }
                 }
             }
-        }
     }
+}
 }

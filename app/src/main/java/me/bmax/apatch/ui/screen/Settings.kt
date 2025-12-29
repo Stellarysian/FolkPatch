@@ -75,6 +75,8 @@ import androidx.compose.material.icons.filled.ViewQuilt
 import me.bmax.apatch.ui.component.CheckboxItem
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.generated.destinations.ThemeStoreScreenDestination
+import com.ramcosta.composedestinations.generated.destinations.AceFSSettingsScreenDestination
+import androidx.compose.material.icons.filled.Settings
 
 import androidx.compose.ui.res.painterResource
 import androidx.compose.material3.AlertDialogDefaults
@@ -225,7 +227,12 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 title = { Text(stringResource(R.string.settings)) },
                 searchText = searchText,
                 onSearchTextChange = { searchText = it },
-                onClearClick = { searchText = "" }
+                onClearClick = { searchText = "" },
+                dropdownContent = {
+                    IconButton(onClick = { navigator.navigate(AceFSSettingsScreenDestination) }) {
+                        Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.acefs_settings_title))
+                    }
+                }
             )
         },
         containerColor = Color.Transparent,
@@ -2017,7 +2024,12 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             var disableModuleUpdateCheck by rememberSaveable { mutableStateOf(prefs.getBoolean("disable_module_update_check", false)) }
             val showDisableModuleUpdateCheck = aPatchReady && (matchModule || shouldShow(disableModuleUpdateCheckTitle, disableModuleUpdateCheckSummary))
 
-            val showModuleCategory = showAutoBackup || showOpenBackupDir || showMoreInfo || showModuleSortOptimization || showDisableModuleUpdateCheck
+            val foldSystemModuleTitle = stringResource(id = R.string.settings_fold_system_module)
+            val foldSystemModuleSummary = stringResource(id = R.string.settings_fold_system_module_summary)
+            var foldSystemModule by rememberSaveable { mutableStateOf(prefs.getBoolean("fold_system_module", false)) }
+            val showFoldSystemModule = aPatchReady && (matchModule || shouldShow(foldSystemModuleTitle, foldSystemModuleSummary))
+
+            val showModuleCategory = showAutoBackup || showOpenBackupDir || showMoreInfo || showModuleSortOptimization || showDisableModuleUpdateCheck || showFoldSystemModule
 
             if (showModuleCategory) {
                 SettingsCategory(icon = Icons.Filled.Extension, title = moduleTitle, isSearching = searchText.isNotEmpty()) {
@@ -2030,6 +2042,18 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                         ) {
                             prefs.edit { putBoolean("disable_module_update_check", it) }
                             disableModuleUpdateCheck = it
+                        }
+                    }
+
+                    if (showFoldSystemModule) {
+                        SwitchItem(
+                            icon = Icons.Filled.Settings,
+                            title = foldSystemModuleTitle,
+                            summary = foldSystemModuleSummary,
+                            checked = foldSystemModule
+                        ) {
+                            prefs.edit { putBoolean("fold_system_module", it) }
+                            foldSystemModule = it
                         }
                     }
 

@@ -294,20 +294,26 @@ fun ThemeFilterSheetContent(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            val chipColors = FilterChipDefaults.filterChipColors(
+                selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 1f)
+            )
             FilterChip(
                 selected = source == "all",
                 onClick = { source = "all" },
-                label = { Text(stringResource(R.string.theme_store_filter_source_all)) }
+                label = { Text(stringResource(R.string.theme_store_filter_source_all)) },
+                colors = chipColors
             )
             FilterChip(
                 selected = source == "official",
                 onClick = { source = "official" },
-                label = { Text(stringResource(R.string.theme_source_official)) }
+                label = { Text(stringResource(R.string.theme_source_official)) },
+                colors = chipColors
             )
             FilterChip(
                 selected = source == "third_party",
                 onClick = { source = "third_party" },
-                label = { Text(stringResource(R.string.theme_source_third_party)) }
+                label = { Text(stringResource(R.string.theme_source_third_party)) },
+                colors = chipColors
             )
         }
 
@@ -325,15 +331,20 @@ fun ThemeFilterSheetContent(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            val chipColors = FilterChipDefaults.filterChipColors(
+                selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 1f)
+            )
             FilterChip(
                 selected = typePhone,
                 onClick = { typePhone = !typePhone },
-                label = { Text(stringResource(R.string.theme_type_phone)) }
+                label = { Text(stringResource(R.string.theme_type_phone)) },
+                colors = chipColors
             )
             FilterChip(
                 selected = typeTablet,
                 onClick = { typeTablet = !typeTablet },
-                label = { Text(stringResource(R.string.theme_type_tablet)) }
+                label = { Text(stringResource(R.string.theme_type_tablet)) },
+                colors = chipColors
             )
         }
 

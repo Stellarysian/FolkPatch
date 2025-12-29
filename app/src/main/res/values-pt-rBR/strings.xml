@@ -223,6 +223,8 @@
     <string name="settings_show_disable_all_modules_summary">Exibir um botão na página de módulos para desativar todos de uma vez</string>
     <string name="settings_module_sort_optimization">Otimização de Ordem dos Módulos</string>
     <string name="settings_module_sort_optimization_summary">Fazer módulos de sistema com WebUI e Ação aparecerem no topo</string>
+    <string name="settings_fold_system_module">Dobrar Módulos do Sistema</string>
+    <string name="settings_fold_system_module_summary">Clique no cartão do módulo para expandir/colapsar ações</string>
     <string name="apm_install_confirm_title">Instalar Módulo</string>
     <string name="apm_install_confirm_content">Tem certeza de que deseja instalar %s?</string>
     <string name="apm_disable_all_title">Desativar Todos os Módulos</string>

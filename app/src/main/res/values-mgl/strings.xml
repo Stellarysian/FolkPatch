@@ -210,6 +210,8 @@
     <string name="settings_show_disable_all_modules_summary">在魔法阵页面显示一键禁用所有魔法阵的按钮</string>
     <string name="settings_module_sort_optimization">魔法阵排序优化</string>
     <string name="settings_module_sort_optimization_summary">让系统魔法阵带有WebUI和Action的魔法阵排在前面</string>
+    <string name="settings_fold_system_module">折叠系统魔法阵</string>
+    <string name="settings_fold_system_module_summary">点击魔法阵卡片展开/折叠操作按钮</string>
     <string name="settings_show_more_module_info">显示魔法阵详细信息</string>
     <string name="settings_show_more_module_info_summary">在魔法阵列表中显示魔法阵 ID 和大小</string>
     <string name="apm_install_confirm_title">安装魔法阵</string>

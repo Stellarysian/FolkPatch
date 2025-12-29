@@ -219,6 +219,8 @@
     <string name="settings_disable_module_update_check_summary">禁用系统模块的自动更新检查</string>
     <string name="settings_module_sort_optimization">模块排序优化</string>
     <string name="settings_module_sort_optimization_summary">让系统模块带有WebUI和Action的模块排在前面</string>
+    <string name="settings_fold_system_module">折叠系统模块</string>
+    <string name="settings_fold_system_module_summary">点击模块卡片展开/折叠操作按钮</string>
     <string name="apm_install_confirm_title">安装模块</string>
     <string name="apm_install_confirm_content">确定要安装 %s 吗？</string>
     <string name="apm_disable_all_title">禁用所有模块</string>
@@ -613,4 +615,31 @@
     <string name="su_restore_list">还原列表</string>
     <string name="backup_success">备份成功</string>
     <string name="restore_success">还原成功</string>
+
+    <!-- AceFS Settings -->
+    <string name="acefs_settings_title">AceFS 设置</string>
+    <string name="acefs_hide_service_title">FolkPatch Hide伪装服务</string>
+    <string name="acefs_hide_service_summary">使用Hide服务来隐藏一些东西</string>
+    <string name="acefs_hide_btn">开启 Hide</string>
+    <string name="acefs_category_hide">隐藏配置</string>
+    <string name="acefs_umount_paths">自定义卸载挂载路径</string>
+    <string name="acefs_category_spoof">伪装配置</string>
+    <string name="acefs_fake_kernel_version">伪装内核版本</string>
+    <string name="acefs_fake_build_time">伪装构建时间</string>
+    <string name="acefs_hidden_paths">自定义隐藏路径</string>
+    <string name="acefs_category_permission">权限管理</string>
+    <string name="acefs_manage_superuser">接管原生超级用户列表</string>
+    <string name="acefs_add_item">添加</string>
+    <string name="acefs_remove_item">移除</string>
+    <string name="acefs_umount_paths_zygisk">目标应用自定义卸载挂载路径</string>
+    <string name="acefs_zygisk_pkg">包名</string>
+    <string name="acefs_zygisk_path">路径</string>
+    <string name="acefs_zygisk_packages">目标应用</string>
+    <string name="acefs_zygisk_paths">卸载路径</string>
+    <string name="acefs_add_group">添加组</string>
+    <string name="acefs_edit_group">编辑组</string>
+    <string name="acefs_save_success">配置保存成功</string>
+    <string name="acefs_save_failed">配置保存失败</string>
+    <string name="acefs_zygisk_missing">缺失 Zygisk API, 无法使用</string>
+    <string name="acefs_save_config">保存配置</string>
 </resources>

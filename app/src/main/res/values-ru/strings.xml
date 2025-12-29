@@ -216,6 +216,8 @@
     <string name="settings_show_disable_all_modules_summary">Отображать кнопку на странице модулей для отключения всех модулей одновременно</string>
     <string name="settings_module_sort_optimization">Оптимизация сортировки модулей</string>
     <string name="settings_module_sort_optimization_summary">Разместить системные модули с WebUI и Action в начале списка</string>
+    <string name="settings_fold_system_module">Свернуть системные модули</string>
+    <string name="settings_fold_system_module_summary">Нажмите на карточку модуля, чтобы развернуть/свернуть действия</string>
     <string name="settings_show_more_module_info">Показать подробности о модуле</string>
     <string name="settings_show_more_module_info_summary">Показать ID и размер модуля в списке модулей</string>
     <string name="apm_install_confirm_title">Установить модуль</string>

@@ -220,6 +220,8 @@
     <string name="settings_show_more_module_info_summary">モジュールリストにモジュール ID とサイズを表示</string>
     <string name="settings_module_sort_optimization">モジュールソート最適化</string>
     <string name="settings_module_sort_optimization_summary">WebUIとActionを持つシステムモジュールを先頭に表示する</string>
+    <string name="settings_fold_system_module">システムモジュールを折りたたむ</string>
+    <string name="settings_fold_system_module_summary">モジュールカードをクリックして操作を展開/折りたたみ</string>
     <string name="settings_use_system_color_theme">ダイナミックテーマ</string>
     <string name="settings_use_system_color_theme_summary">システムが壁紙から生成したカラーテーマを使用します</string>
     <string name="settings_custom_color_theme">カラーテーマ</string>

@@ -223,6 +223,8 @@
     <string name="settings_show_disable_all_modules_summary">عرض زر في صفحة الوحدات لتعطيل جميع الوحدات مرة واحدة</string>
     <string name="settings_module_sort_optimization">تحسين فرز الوحدات</string>
     <string name="settings_module_sort_optimization_summary">جعل وحدات النظام مع واجهة المستخدم الرسومية للويب والإجراء تظهر في الأعلى</string>
+    <string name="settings_fold_system_module">طي وحدات النظام</string>
+    <string name="settings_fold_system_module_summary">انقر على بطاقة الوحدة للتوسيع/الطي الإجراءات</string>
     <string name="apm_install_confirm_title">تثبيت الوحدة</string>
     <string name="apm_install_confirm_content">هل أنت متأكد من أنك تريد تثبيت %s؟</string>
     <string name="apm_disable_all_title">تعطيل كل الوحدات</string>
