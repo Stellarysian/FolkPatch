@@ -225,6 +225,7 @@ class APModuleViewModel : ViewModel() {
 
     fun getModuleSize(moduleId: String): String {
         val bytes = runCatching {
+            // Commit: https://github.com/SukiSU-Ultra/SukiSU-Ultra/commit/787c88ab2d070f3c6ec7ddff2f4ace1f3ebdd0c3#diff-0096fc38da30ffd8ed48e51a10354d85ca6218b67506538beae11fe4fe035ea4
             val command = "/data/adb/ap/bin/busybox du -sb /data/adb/modules/$moduleId"
             val result = getRootShell().newJob().add(command).to(ArrayList(), null).exec()
 
@@ -240,6 +241,17 @@ class APModuleViewModel : ViewModel() {
     }
 }
 
+/**
+ * 格式化文件大小显示
+ *
+ * This function is derived from SukiSU-Ultra project
+ * Project: https://github.com/SukiSU-Ultra/SukiSU-Ultra
+ * Original source: manager/app/src/main/java/com/sukisu/ultra/ui/viewmodel/ModuleViewModel.kt
+ * Commit: 787c88ab2d070f3c6ec7ddff2f4ace1f3ebdd0c3
+ * View at: https://github.com/SukiSU-Ultra/SukiSU-Ultra/blob/787c88ab2d070f3c6ec7ddff2f4ace1f3ebdd0c3/manager/app/src/main/java/com/sukisu/ultra/ui/viewmodel/ModuleViewModel.kt
+ *
+ * SukiSU-Ultra is a Kernel-based Android Root Solution & KPM
+ */
 private fun formatFileSize(bytes: Long): String {
     if (bytes <= 0) return "0 KB"
 
@@ -250,3 +262,5 @@ private fun formatFileSize(bytes: Long): String {
         bytes / 1024.0.pow(digitGroups.toDouble())
     ) + " " + units[digitGroups]
 }
+
+// End of file

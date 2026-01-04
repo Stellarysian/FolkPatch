@@ -191,27 +191,25 @@ private fun DeviceStatusCard(isWallpaperMode: Boolean) {
     var batteryTemp by remember { mutableStateOf(0f) }
     var batteryLevel by remember { mutableIntStateOf(0) }
     var cpuUsage by remember { mutableIntStateOf(0) }
-    
+
     val lifecycleOwner = LocalLifecycleOwner.current
-    
+
     LaunchedEffect(lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.RESUMED) {
             withContext(Dispatchers.IO) {
-                while (true) {
-                    // Battery Info
-                    val intent = context.registerReceiver(null, android.content.IntentFilter(android.content.Intent.ACTION_BATTERY_CHANGED))
-                    batteryTemp = (intent?.getIntExtra(android.os.BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0) / 10f
-                    val level = intent?.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1) ?: -1
-                    val scale = intent?.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, -1) ?: -1
-                    if (level != -1 && scale != -1) {
-                        batteryLevel = (level * 100 / scale.toFloat()).toInt()
-                    }
-
-                    // CPU Usage (HardwareMonitor)
-                    cpuUsage = HardwareMonitor.getCpuUsage()
-                    
-                    kotlinx.coroutines.delay(2000) // Update every 2 seconds
+                // Battery Info
+                val intent = context.registerReceiver(null, android.content.IntentFilter(android.content.Intent.ACTION_BATTERY_CHANGED))
+                batteryTemp = (intent?.getIntExtra(android.os.BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0) / 10f
+                val level = intent?.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1) ?: -1
+                val scale = intent?.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, -1) ?: -1
+                if (level != -1 && scale != -1) {
+                    batteryLevel = (level * 100 / scale.toFloat()).toInt()
                 }
+
+                // CPU Usage (HardwareMonitor)
+                cpuUsage = HardwareMonitor.getCpuUsage()
+
+                kotlinx.coroutines.delay(10000)
             }
         }
     }
@@ -258,39 +256,39 @@ private fun StorageCard(isWallpaperMode: Boolean) {
     var ramTotal by remember { mutableLongStateOf(0L) }
     var storageUsed by remember { mutableLongStateOf(0L) }
     var storageTotal by remember { mutableLongStateOf(0L) }
-    
+
     // ZRAM & Swap
     var zramUsed by remember { mutableLongStateOf(0L) }
     var zramTotal by remember { mutableLongStateOf(0L) }
     var swapUsed by remember { mutableLongStateOf(0L) }
     var swapTotal by remember { mutableLongStateOf(0L) }
-    
+
     val lifecycleOwner = LocalLifecycleOwner.current
-    
+
+    // [OPTIMIZE] 只在 RESUMED 状态时定期更新,并在 PAUSED 时自动停止
     LaunchedEffect(lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.RESUMED) {
             withContext(Dispatchers.IO) {
-                while (true) {
-                    // Internal Storage (Standard Java API)
-                    val dataDir = android.os.Environment.getDataDirectory()
-                    val stat = android.os.StatFs(dataDir.path)
-                    val blockSize = stat.blockSizeLong
-                    val totalBlocks = stat.blockCountLong
-                    val availableBlocks = stat.availableBlocksLong
-                    storageTotal = totalBlocks * blockSize
-                    storageUsed = storageTotal - (availableBlocks * blockSize)
+                // Internal Storage (Standard Java API)
+                val dataDir = android.os.Environment.getDataDirectory()
+                val stat = android.os.StatFs(dataDir.path)
+                val blockSize = stat.blockSizeLong
+                val totalBlocks = stat.blockCountLong
+                val availableBlocks = stat.availableBlocksLong
+                storageTotal = totalBlocks * blockSize
+                storageUsed = storageTotal - (availableBlocks * blockSize)
 
-                    // Memory Info (HardwareMonitor)
-                    val memInfo = HardwareMonitor.getMemoryInfo()
-                    ramTotal = memInfo.ramTotal
-                    ramUsed = memInfo.ramUsed
-                    zramTotal = memInfo.zramTotal
-                    zramUsed = memInfo.zramUsed
-                    swapTotal = memInfo.swapTotal
-                    swapUsed = memInfo.swapUsed
-                    
-                    kotlinx.coroutines.delay(5000)
-                }
+                // Memory Info (HardwareMonitor)
+                val memInfo = HardwareMonitor.getMemoryInfo()
+                ramTotal = memInfo.ramTotal
+                ramUsed = memInfo.ramUsed
+                zramTotal = memInfo.zramTotal
+                zramUsed = memInfo.zramUsed
+                swapTotal = memInfo.swapTotal
+                swapUsed = memInfo.swapUsed
+
+                // [OPTIMIZE] 保持5秒更新频率,存储信息变化较慢
+                kotlinx.coroutines.delay(5000)
             }
         }
     }

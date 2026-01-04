@@ -666,6 +666,9 @@
     <string name="patch_embed_acefs_title">Встроить ядро AceFS-S</string>
     <string name="patch_embed_acefs_summary">Встроить патч AceFS при патчинге</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">Включить счетчик значков</string>
-    <string name="enable_badge_count_summary">Включить счетчик значков для суперпользователя и системных модулей на панели навигации</string>
+    <string name="enable_badge_count">Настройки счётчика значков</string>
+    <string name="enable_badge_count_summary">Настройка отображения счётчика значков для элементов навигации</string>
+    <string name="badge_superuser">Показывать значок суперпользователя</string>
+    <string name="badge_apm">Показывать значок APM</string>
+    <string name="badge_kernel">Показывать значок модуля ядра</string>
 </resources>

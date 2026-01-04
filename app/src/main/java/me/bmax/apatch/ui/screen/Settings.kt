@@ -78,7 +78,8 @@ import androidx.compose.material.icons.filled.Notifications
 import me.bmax.apatch.ui.component.CheckboxItem
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.generated.destinations.ThemeStoreScreenDestination
-import com.ramcosta.composedestinations.generated.destinations.AceFSSettingsScreenDestination
+// [TEMP_DISABLED_ACEFS] AceFS 设置界面导航暂时注释
+// import com.ramcosta.composedestinations.generated.destinations.AceFSSettingsScreenDestination
 import androidx.compose.material.icons.filled.Settings
 
 import androidx.compose.ui.res.painterResource
@@ -233,9 +234,10 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                 onSearchTextChange = { searchText = it },
                 onClearClick = { searchText = "" },
                 dropdownContent = {
-                    IconButton(onClick = { navigator.navigate(AceFSSettingsScreenDestination) }) {
-                        Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.acefs_settings_title))
-                    }
+                    // [TEMP_DISABLED_ACEFS] AceFS 设置界面入口按钮暂时注释
+                    // IconButton(onClick = { navigator.navigate(AceFSSettingsScreenDestination) }) {
+                    //     Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.acefs_settings_title))
+                    // }
                 }
             )
         },
@@ -531,7 +533,10 @@ fun SettingScreen(navigator: DestinationsNavigator) {
         var hideSuPath by rememberSaveable { mutableStateOf(prefs.getBoolean("hide_su_path", false)) }
         var hideKpatchVersion by rememberSaveable { mutableStateOf(prefs.getBoolean("hide_kpatch_version", false)) }
         var hideFingerprint by rememberSaveable { mutableStateOf(prefs.getBoolean("hide_fingerprint", false)) }
-        var enableBadgeCount by rememberSaveable { mutableStateOf(prefs.getBoolean("enable_badge_count", true)) }
+        // Individual badge count settings - default enabled
+        var enableSuperUserBadge by rememberSaveable { mutableStateOf(prefs.getBoolean("badge_superuser", true)) }
+        var enableApmBadge by rememberSaveable { mutableStateOf(prefs.getBoolean("badge_apm", true)) }
+        var enableKernelBadge by rememberSaveable { mutableStateOf(prefs.getBoolean("badge_kernel", true)) }
         var folkXEngineEnabled by rememberSaveable { mutableStateOf(prefs.getBoolean("folkx_engine_enabled", true)) }
 
         // Module
@@ -1856,9 +1861,18 @@ fun SettingScreen(navigator: DestinationsNavigator) {
             val hideFingerprintSummary = stringResource(id = R.string.home_hide_fingerprint_summary)
             val showHideFingerprint = matchBehavior || shouldShow(hideFingerprintTitle, hideFingerprintSummary)
 
+            // Badge Count Settings
             val badgeCountTitle = stringResource(id = R.string.enable_badge_count)
             val badgeCountSummary = stringResource(id = R.string.enable_badge_count_summary)
-            val showBadgeCount = matchBehavior || shouldShow(badgeCountTitle, badgeCountSummary)
+            val showSuperUserBadgeTitle = stringResource(id = R.string.badge_superuser)
+            val showApmBadgeTitle = stringResource(id = R.string.badge_apm)
+            val showKernelBadgeTitle = stringResource(id = R.string.badge_kernel)
+
+            val showBadgeCount = matchBehavior ||
+                shouldShow(badgeCountTitle, badgeCountSummary) ||
+                shouldShow(showSuperUserBadgeTitle) ||
+                shouldShow(showApmBadgeTitle) ||
+                shouldShow(showKernelBadgeTitle)
 
             val showBehaviorCategory = showWebDebugging || showInstallConfirm || showDisableModules || showStayOnPage || showHideApatch || showHideSu || showHideKpatch || showHideFingerprint || showBadgeCount
 
@@ -1965,16 +1979,43 @@ fun SettingScreen(navigator: DestinationsNavigator) {
                         }
                     }
 
-                    // Badge Count
+                    // Badge Count Settings
                     if (showBadgeCount) {
-                        SwitchItem(
+                        SettingsCategory(
                             icon = Icons.Filled.Notifications,
                             title = badgeCountTitle,
                             summary = badgeCountSummary,
-                            checked = enableBadgeCount
+                            isSearching = searchText.isNotEmpty()
                         ) {
-                            prefs.edit { putBoolean("enable_badge_count", it) }
-                            enableBadgeCount = it
+                            CheckboxItem(
+                                icon = Icons.Filled.Security,
+                                title = showSuperUserBadgeTitle,
+                                summary = null,
+                                checked = enableSuperUserBadge
+                            ) {
+                                prefs.edit().putBoolean("badge_superuser", it).apply()
+                                enableSuperUserBadge = it
+                            }
+
+                            CheckboxItem(
+                                icon = Icons.Filled.Extension,
+                                title = showApmBadgeTitle,
+                                summary = null,
+                                checked = enableApmBadge
+                            ) {
+                                prefs.edit().putBoolean("badge_apm", it).apply()
+                                enableApmBadge = it
+                            }
+
+                            CheckboxItem(
+                                icon = Icons.Filled.Archive,
+                                title = showKernelBadgeTitle,
+                                summary = null,
+                                checked = enableKernelBadge
+                            ) {
+                                prefs.edit().putBoolean("badge_kernel", it).apply()
+                                enableKernelBadge = it
+                            }
                         }
                     }
                 }

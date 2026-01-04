@@ -657,6 +657,9 @@
     <string name="patch_embed_acefs_title">嵌入 AceFS-S 內核</string>
     <string name="patch_embed_acefs_summary">修補時嵌入 AceFS 補丁</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">啟用角標統計</string>
-    <string name="enable_badge_count_summary">為超級用戶和系統模組啟用角標統計功能</string>
+    <string name="enable_badge_count">角標統計設定</string>
+    <string name="enable_badge_count_summary">配置導航項的角標統計顯示</string>
+    <string name="badge_superuser">顯示超級用戶角標</string>
+    <string name="badge_apm">顯示 APM 模組角標</string>
+    <string name="badge_kernel">顯示內核模組角標</string>
 </resources>

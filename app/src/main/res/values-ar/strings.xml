@@ -672,6 +672,9 @@
     <string name="patch_embed_acefs_title">تضمين نواة AceFS-S</string>
     <string name="patch_embed_acefs_summary">تضمين تصحيح AceFS عند التصحيح</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">تفعيل عدد الشارات</string>
-    <string name="enable_badge_count_summary">تفعيل عدد الشارات للمستخدم المتميز والوحدات النظامية على شريط التنقل</string>
+    <string name="enable_badge_count">إعدادات عدد الشارات</string>
+    <string name="enable_badge_count_summary">تكوين عرض عدد الشارات لعناصر التنقل</string>
+    <string name="badge_superuser">إظهار شارة المستخدم المتميز</string>
+    <string name="badge_apm">إظهار شارة APM</string>
+    <string name="badge_kernel">إظهار شارة وحدة النواة</string>
 </resources>

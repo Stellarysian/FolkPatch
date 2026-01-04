@@ -625,6 +625,9 @@
     <string name="patch_embed_acefs_title">AceFS-S カーネルを埋め込む</string>
     <string name="patch_embed_acefs_summary">パッチ適用時に AceFS を埋め込む</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">バッジ数を有効にする</string>
-    <string name="enable_badge_count_summary">スーパーユーザーとシステムモジュールのバッジ数をナビゲーションバーに表示する</string>
+    <string name="enable_badge_count">バッジ数設定</string>
+    <string name="enable_badge_count_summary">ナビゲーション項目のバッジ数表示を設定</string>
+    <string name="badge_superuser">スーパーユーザーバッジを表示</string>
+    <string name="badge_apm">APM モジュールバッジを表示</string>
+    <string name="badge_kernel">カーネルモジュールバッジを表示</string>
 </resources>

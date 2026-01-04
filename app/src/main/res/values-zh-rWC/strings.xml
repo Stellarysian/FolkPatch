@@ -659,6 +659,9 @@
     <string name="patch_embed_acefs_title">嵌入 AceFS-S 內核</string>
     <string name="patch_embed_acefs_summary">修補時嵌入 AceFS 補丁</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">灵印显法</string>
-    <string name="enable_badge_count_summary">于法界台灵镜上显示道友之数与仙术模块之数</string>
+    <string name="enable_badge_count">灵印显法设定</string>
+    <string name="enable_badge_count_summary">配置天机阁灵印之显现</string>
+    <string name="badge_superuser">显登仙至尊之数</string>
+    <string name="badge_apm">显天道仙符之数</string>
+    <string name="badge_kernel">显道核仙符之数</string>
 </resources>

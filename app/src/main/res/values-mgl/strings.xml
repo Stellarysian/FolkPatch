@@ -662,6 +662,9 @@
     <string name="patch_embed_acefs_title">嵌入 AceFS-S 魔法内核</string>
     <string name="patch_embed_acefs_summary">在使用魔法的时候使用 AceFS-S 魔法内核</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">咒印显现</string>
-    <string name="enable_badge_count_summary">在咒语导航咒印上显示超凡者与魔法模组之符箓数</string>
+    <string name="enable_badge_count">魔法印记设定</string>
+    <string name="enable_badge_count_summary">配置星图导航的魔法印记显示</string>
+    <string name="badge_superuser">显示魔法使印记</string>
+    <string name="badge_apm">显示星之魔法阵印记</string>
+    <string name="badge_kernel">显示心之结晶印记</string>
 </resources>

@@ -677,6 +677,9 @@
     <string name="patch_embed_acefs_summary">Embed AceFS patch when patching</string>
 
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">Enable Badge Count</string>
-    <string name="enable_badge_count_summary">Enable badge count for superuser and system modules on the navigation bar</string>
+    <string name="enable_badge_count">Badge Count Settings</string>
+    <string name="enable_badge_count_summary">Configure badge count display for navigation items</string>
+    <string name="badge_superuser">Show SuperUser Badge</string>
+    <string name="badge_apm">Show APM Badge</string>
+    <string name="badge_kernel">Show Kernel Module Badge</string>
 </resources>

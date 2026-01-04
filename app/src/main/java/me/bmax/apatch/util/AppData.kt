@@ -19,10 +19,12 @@ object AppData {
         // Private state flows for counts
         private val _superuserCount = MutableStateFlow(0)
         private val _apmModuleCount = MutableStateFlow(0)
+        private val _kernelModuleCount = MutableStateFlow(0)
 
         // Public read-only state flows
         val superuserCount: StateFlow<Int> = _superuserCount.asStateFlow()
         val apmModuleCount: StateFlow<Int> = _apmModuleCount.asStateFlow()
+        val kernelModuleCount: StateFlow<Int> = _kernelModuleCount.asStateFlow()
 
         /**
          * Refresh all data counts
@@ -30,6 +32,7 @@ object AppData {
         fun refreshData() {
             _superuserCount.value = getSuperuserCount()
             _apmModuleCount.value = getApmModuleCount()
+            _kernelModuleCount.value = getKernelModuleCount()
         }
     }
 
@@ -56,6 +59,18 @@ object AppData {
             array.length()
         } catch (e: Exception) {
             Log.e(TAG, "Failed to get APM module count", e)
+            0
+        }
+    }
+
+    /**
+     * Get kernel module count
+     */
+    private fun getKernelModuleCount(): Int {
+        return try {
+            Natives.kernelPatchModuleNum().toInt()
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to get kernel module count", e)
             0
         }
     }

@@ -665,6 +665,9 @@
     <string name="patch_embed_acefs_title">Osadź kernel AceFS-S</string>
     <string name="patch_embed_acefs_summary">Osadź patch AceFS przy patchowaniu</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">Włącz licznik odznak</string>
-    <string name="enable_badge_count_summary">Włącz licznik odznak dla superużytkownika i modułów systemowych na pasku nawigacyjnym</string>
+    <string name="enable_badge_count">Ustawienia licznika odznak</string>
+    <string name="enable_badge_count_summary">Skonfiguruj wyświetlanie licznika odznak dla elementów nawigacyjnych</string>
+    <string name="badge_superuser">Pokaż odznakę superużytkownika</string>
+    <string name="badge_apm">Pokaż odznakę APM</string>
+    <string name="badge_kernel">Pokaż odznakę modułu jądra</string>
 </resources>

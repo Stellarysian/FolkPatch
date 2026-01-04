@@ -646,6 +646,9 @@
     <string name="patch_embed_acefs_title">Embed Kernel AceFS-S</string>
     <string name="patch_embed_acefs_summary">Sematkan patch AceFS saat mempatch</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">Aktifkan Hitung Badge</string>
-    <string name="enable_badge_count_summary">Aktifkan hitung badge untuk superuser dan modul sistem pada bilah navigasi</string>
+    <string name="enable_badge_count">Pengaturan Hitung Badge</string>
+    <string name="enable_badge_count_summary">Konfigurasi tampilan hitung badge untuk item navigasi</string>
+    <string name="badge_superuser">Tampilkan Badge Superuser</string>
+    <string name="badge_apm">Tampilkan Badge APM</string>
+    <string name="badge_kernel">Tampilkan Badge Modul Kernel</string>
 </resources>

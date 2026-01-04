@@ -670,6 +670,9 @@
     <string name="patch_embed_acefs_title">Incorporar kernel AceFS-S</string>
     <string name="patch_embed_acefs_summary">Incorporar patch AceFS ao patchear</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">Ativar contador de selos</string>
-    <string name="enable_badge_count_summary">Ativar contador de selos para superusuário e módulos do sistema na barra de navegação</string>
+    <string name="enable_badge_count">Configurações do contador de selos</string>
+    <string name="enable_badge_count_summary">Configurar a exibição do contador de selos para itens de navegação</string>
+    <string name="badge_superuser">Mostrar selo de superusuário</string>
+    <string name="badge_apm">Mostrar selo APM</string>
+    <string name="badge_kernel">Mostrar selo de módulo do kernel</string>
 </resources>

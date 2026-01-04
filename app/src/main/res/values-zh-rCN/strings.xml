@@ -670,6 +670,9 @@
     <string name="patch_embed_acefs_summary">修补时嵌入 AceFS 补丁</string>
 
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">启用角标统计</string>
-    <string name="enable_badge_count_summary">为超级用户和系统模块启用角标统计功能</string>
+    <string name="enable_badge_count">角标统计设置</string>
+    <string name="enable_badge_count_summary">配置导航项的角标统计显示</string>
+    <string name="badge_superuser">显示超级用户角标</string>
+    <string name="badge_apm">显示 APM 模块角标</string>
+    <string name="badge_kernel">显示内核模块角标</string>
 </resources>

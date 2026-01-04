@@ -665,6 +665,9 @@
     <string name="patch_embed_acefs_title">嵌入 AceFS-S 圣光內核</string>
     <string name="patch_embed_acefs_summary">修补的时候嵌入 AceFS 圣光內核</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">魔法印记</string>
-    <string name="enable_badge_count_summary">在天使导航台上显示灵术徽章与魔法模组数量</string>
+    <string name="enable_badge_count">神恩印记设定</string>
+    <string name="enable_badge_count_summary">配置神谕圣所的神恩印记显示</string>
+    <string name="badge_superuser">显示圣光使者印记</string>
+    <string name="badge_apm">显示星辰圣光阵印记</string>
+    <string name="badge_kernel">显示灵魂晶石印记</string>
 </resources>

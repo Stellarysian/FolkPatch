@@ -671,6 +671,9 @@
     <string name="patch_embed_acefs_title">Incrustar núcleo AceFS-S</string>
     <string name="patch_embed_acefs_summary">Incrustar parche AceFS al parchear</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">Activar conteo de insignias</string>
-    <string name="enable_badge_count_summary">Activar conteo de insignias para superusuario y módulos del sistema en la barra de navegación</string>
+    <string name="enable_badge_count">Configuración de conteo de insignias</string>
+    <string name="enable_badge_count_summary">Configurar la visualización del conteo de insignias para elementos de navegación</string>
+    <string name="badge_superuser">Mostrar insignia de superusuario</string>
+    <string name="badge_apm">Mostrar insignia de APM</string>
+    <string name="badge_kernel">Mostrar insignia de módulo del kernel</string>
 </resources>

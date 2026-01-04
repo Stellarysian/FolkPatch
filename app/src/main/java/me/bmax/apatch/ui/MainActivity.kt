@@ -635,12 +635,15 @@ private fun BottomBar(navController: NavHostController) {
     var showNavKpm by remember { mutableStateOf(prefs.getBoolean("show_nav_kpm", true)) }
     var showNavSuperUser by remember { mutableStateOf(prefs.getBoolean("show_nav_superuser", true)) }
 
-    // Badge count settings - default enabled
-    var enableBadgeCount by remember { mutableStateOf(prefs.getBoolean("enable_badge_count", true)) }
+    // Individual badge count settings - default enabled
+    var enableSuperUserBadge by remember { mutableStateOf(prefs.getBoolean("badge_superuser", true)) }
+    var enableApmBadge by remember { mutableStateOf(prefs.getBoolean("badge_apm", true)) }
+    var enableKernelBadge by remember { mutableStateOf(prefs.getBoolean("badge_kernel", true)) }
 
     // Collect badge counts from AppData
     val superuserCount by me.bmax.apatch.util.AppData.DataRefreshManager.superuserCount.collectAsState()
     val apmModuleCount by me.bmax.apatch.util.AppData.DataRefreshManager.apmModuleCount.collectAsState()
+    val kernelModuleCount by me.bmax.apatch.util.AppData.DataRefreshManager.kernelModuleCount.collectAsState()
 
     DisposableEffect(Unit) {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
@@ -648,7 +651,9 @@ private fun BottomBar(navController: NavHostController) {
                 "show_nav_apm" -> showNavApm = sharedPrefs.getBoolean(key, true)
                 "show_nav_kpm" -> showNavKpm = sharedPrefs.getBoolean(key, true)
                 "show_nav_superuser" -> showNavSuperUser = sharedPrefs.getBoolean(key, true)
-                "enable_badge_count" -> enableBadgeCount = sharedPrefs.getBoolean(key, true)
+                "badge_superuser" -> enableSuperUserBadge = sharedPrefs.getBoolean(key, true)
+                "badge_apm" -> enableApmBadge = sharedPrefs.getBoolean(key, true)
+                "badge_kernel" -> enableKernelBadge = sharedPrefs.getBoolean(key, true)
             }
         }
         prefs.registerOnSharedPreferenceChangeListener(listener)
@@ -701,8 +706,9 @@ private fun BottomBar(navController: NavHostController) {
                             },
                             icon = {
                                 val badgeContent = when {
-                                    destination == BottomBarDestination.SuperUser && enableBadgeCount -> superuserCount
-                                    destination == BottomBarDestination.AModule && enableBadgeCount -> apmModuleCount
+                                    destination == BottomBarDestination.SuperUser && enableSuperUserBadge -> superuserCount
+                                    destination == BottomBarDestination.AModule && enableApmBadge -> apmModuleCount
+                                    destination == BottomBarDestination.KModule && enableKernelBadge -> kernelModuleCount
                                     else -> 0
                                 }
 

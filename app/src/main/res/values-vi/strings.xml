@@ -662,6 +662,9 @@
     <string name="patch_embed_acefs_title">Nhúng kernel AceFS-S</string>
     <string name="patch_embed_acefs_summary">Nhúng patch AceFS khi vá</string>
     <!-- Badge Count Settings -->
-    <string name="enable_badge_count">Bật đếm huy hiệu</string>
-    <string name="enable_badge_count_summary">Bật đếm huy hiệu cho siêu người dùng và mô-đun hệ thống trên thanh điều hướng</string>
+    <string name="enable_badge_count">Cài đặt đếm huy hiệu</string>
+    <string name="enable_badge_count_summary">Cấu hình hiển thị số đếm huy hiệu cho các mục điều hướng</string>
+    <string name="badge_superuser">Hiển thị huy hiệu siêu người dùng</string>
+    <string name="badge_apm">Hiển thị huy hiệu APM</string>
+    <string name="badge_kernel">Hiển thị huy hiệu mô-đun hạt nhân</string>
 </resources>
