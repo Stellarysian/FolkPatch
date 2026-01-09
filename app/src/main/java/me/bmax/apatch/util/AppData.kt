@@ -1,10 +1,12 @@
 package me.bmax.apatch.util
 
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.withContext
 import me.bmax.apatch.Natives
 import org.json.JSONArray
 
@@ -29,7 +31,7 @@ object AppData {
         /**
          * Refresh all data counts
          */
-        fun refreshData() {
+        suspend fun refreshData() = withContext(Dispatchers.IO) {
             _superuserCount.value = getSuperuserCount()
             _apmModuleCount.value = getApmModuleCount()
             _kernelModuleCount.value = getKernelModuleCount()
@@ -54,8 +56,8 @@ object AppData {
     /**
      * Get APM module count
      */
-    private fun getApmModuleCount(): Int {
-        return try {
+    private suspend fun getApmModuleCount(): Int = withContext(Dispatchers.IO) {
+        try {
             val result = listModules()
             val array = JSONArray(result)
             array.length()

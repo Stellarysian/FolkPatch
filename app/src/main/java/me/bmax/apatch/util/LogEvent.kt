@@ -4,13 +4,15 @@ import android.content.Context
 import android.os.Build
 import android.system.Os
 import com.topjohnwu.superuser.ShellUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun getBugreportFile(context: Context): File {
+suspend fun getBugreportFile(context: Context): File = withContext(Dispatchers.IO) {
 
     val bugreportDir = File(context.cacheDir, "bugreport")
     bugreportDir.mkdirs()
@@ -90,5 +92,5 @@ fun getBugreportFile(context: Context): File {
     shell.newJob().add("rm -rf ${bugreportDir.absolutePath}").exec()
     shell.newJob().add("chmod 0644 ${targetFile.absolutePath}").exec()
 
-    return targetFile
+    return@withContext targetFile
 }

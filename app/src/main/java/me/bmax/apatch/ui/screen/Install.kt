@@ -186,9 +186,6 @@ fun InstallScreen(navigator: DestinationsNavigator, uri: Uri, type: MODULE_TYPE)
         }
 
     }, snackbarHost = { SnackbarHost(snackBarHost) }) { innerPadding ->
-        KeyEventBlocker {
-            it.key == Key.VolumeDown || it.key == Key.VolumeUp
-        }
         Column(
             modifier = Modifier
                 .fillMaxSize(1f)

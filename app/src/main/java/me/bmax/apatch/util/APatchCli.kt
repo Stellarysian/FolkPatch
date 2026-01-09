@@ -24,7 +24,13 @@ import java.security.MessageDigest
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.zip.ZipFile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 
 private const val TAG = "APatchCli"
 
@@ -163,15 +169,24 @@ fun execApd(args: String, newShell: Boolean = false): Boolean {
     }
 }
 
-fun listModules(): String {
+suspend fun listModules(): String = withContext(Dispatchers.IO) {
     val shell = getRootShell()
-    val out =
-        shell.newJob().add("${APApplication.APD_PATH} module list").to(ArrayList(), null).exec().out
+    val out = try {
+        withTimeout(30000L) { // 30 second timeout for listModules
+            shell.newJob().add("${APApplication.APD_PATH} module list").to(ArrayList(), null).exec().out
+        }
+    } catch (e: TimeoutCancellationException) {
+        Log.e(TAG, "listModules timed out after 30 seconds")
+        ArrayList<String>() // Return empty list on timeout
+    } catch (e: Exception) {
+        Log.e(TAG, "listModules failed: ${e.message}")
+        ArrayList<String>() // Return empty list on error
+    }
     withNewRootShell{
        newJob().add("cp /data/user/*/me.bmax.apatch/patch/ori.img /data/adb/ap/ && rm /data/user/*/me.bmax.apatch/patch/ori.img")
        .to(ArrayList(),null).exec()
    }
-    return out.joinToString("\n").ifBlank { "[]" }
+    return@withContext out.joinToString("\n").ifBlank { "[]" }
 }
 
 fun toggleModule(id: String, enable: Boolean): Boolean {
@@ -205,15 +220,24 @@ fun installModule(
         // Auto Backup Logic
         if (type == MODULE_TYPE.APM) {
             val fileName = getFileNameFromUri(apApp, uri)
-            runBlocking {
-                 val result = ModuleBackupUtils.autoBackupModule(apApp, file, fileName)
-                 if (result != null && !result.startsWith("Duplicate")) {
-                     onStdout("Auto backup failed: $result\n")
-                 } else if (result != null && result.startsWith("Duplicate")) {
-                      // onStdout("Auto backup skipped: Duplicate found\n")
-                 } else {
-                      onStdout("Auto backup success\n")
-                 }
+            // Launch backup asynchronously without blocking the main thread
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val result = ModuleBackupUtils.autoBackupModule(apApp, file, fileName)
+                    withContext(Dispatchers.Main) {
+                        if (result != null && !result.startsWith("Duplicate")) {
+                            onStdout("Auto backup failed: $result\n")
+                        } else if (result != null && result.startsWith("Duplicate")) {
+                            // onStdout("Auto backup skipped: Duplicate found\n")
+                        } else {
+                            onStdout("Auto backup success\n")
+                        }
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        onStdout("Auto backup error: ${e.message}\n")
+                    }
+                }
             }
         }
 
@@ -234,8 +258,26 @@ fun installModule(
         var result = false
         if(type == MODULE_TYPE.APM) {
             val cmd = "${APApplication.APD_PATH} module install ${file.absolutePath}"
-            result = shell.newJob().add(cmd).to(stdoutCallback, stderrCallback)
-                    .exec().isSuccess
+            // Add timeout to prevent hanging installations
+            result = try {
+                runBlocking {
+                    withTimeout(300000L) { // 5 minute timeout
+                        shell.newJob()
+                            .add(cmd)
+                            .to(stdoutCallback, stderrCallback)
+                            .exec()
+                            .isSuccess
+                    }
+                }
+            } catch (e: TimeoutCancellationException) {
+                Log.e(TAG, "Module installation timed out after 5 minutes")
+                onStderr("Installation timed out. The module may be incompatible or hanging.\n")
+                false
+            } catch (e: Exception) {
+                Log.e(TAG, "Module installation failed", e)
+                onStderr("Installation failed: ${e.message}\n")
+                false
+            }
         } else {
 //            ZipUtils.
         }
