@@ -290,7 +290,7 @@
     <string name="teal_theme">蓝绿色</string>
     <string name="yellow_theme">黄色</string>
 
-    <string name="about_app_desc">一个基于内核的 Root 解决方案，支持内核模块和内核函数 hook，无需重新编译内核。</string>
+    <string name="about_app_desc">一个基于内核的 Root 解决方案，支持内核模块和内核函数 hook，无需重新编译内核。此程序为基于FolkPatch官方版本的个人改版，不属于官方版本。</string>
     <string name="about_powered_by">由 %1$s 提供支持</string>
     <string name="about_telegram_group">Telegram 群组</string>
     
