@@ -95,7 +95,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "me.yuki.folk"
+        applicationId = "com.keys.Stellarysian"
         buildConfigField("String", "buildKPV", "\"$kernelPatchVersion\"")
         buildConfigField("boolean", "DEBUG_FAKE_ROOT", localProperties.getProperty("debug.fake_root", "false"))
 
